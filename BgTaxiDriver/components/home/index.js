@@ -1,7 +1,9 @@
 'use strict';
 
 app.home = kendo.observable({
-    onShow: function() {},
+    onShow: function() {if(localStorage.getItem("bgTaxiDriver_Auth_authData_homeView") != undefined || app["bgTaxDriver_Auth_authData_homeView"] != undefined){
+     app.mobileApp.navigate('components/mainView/view.html');
+       }},
     afterShow: function() {}
 });
 
@@ -12,8 +14,9 @@ app.home = kendo.observable({
 (function(parent) {
     var provider = app.data.bgTaxiDriver,
         mode = 'signin',
-        registerRedirect = 'home',
-        signinRedirect = 'home',
+        registerRedirect = 'mainView',
+        signinRedirect = 'mainView',
+        rememberKey = 'bgTaxiDriver_Auth_authData_homeView',
         init = function(error, result) {
             $('.status').text('');
 
@@ -50,7 +53,7 @@ app.home = kendo.observable({
         },
         successHandler = function(data) {
             var redirect = mode === 'signin' ? signinRedirect : registerRedirect,
-                model = parent.homeModel || {},
+                model = data;
                 logout = model.logout;
 
             if (logout) {
@@ -131,7 +134,10 @@ app.home = kendo.observable({
                                 rememberme: true
                             };
                             successHandler(rememberedData);
-                        } else {
+                        } else if (status.status == "ROLE NOT MATCH"){
+                               model.set('errorMessage', 'Този акаунт няма права да използва това приложение.');
+                        }else{
+
                             init();
                         }
                     },

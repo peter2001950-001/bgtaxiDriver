@@ -15,7 +15,7 @@
           "registerPasswordLabel": "Парола",
           "registerNameLabel": "Име",
           "registerLabel": "Напред",
-          "registerRedirect": "home",
+          "registerRedirect": "mainView",
           "gotoSigninLabel": "Вход",
           "enableLogout": true,
           "logoutLabel": "Изход",
@@ -23,11 +23,19 @@
           "emailLabel": "Email",
           "passwordLabel": "Парола",
           "signinLabel": "Напред",
-          "signinRedirect": "home"
+          "signinRedirect": "mainView"
         }
       ],
       "title": "Home View",
       "addToNavigation": false
+    },
+    {
+      "type": "kendo-ui-mobile:view",
+      "name": "mainView",
+      "components": [],
+      "title": "Main View",
+      "addToNavigation": true,
+      "icon": "home"
     }
   ],
   "dataProviders": [
@@ -41,10 +49,8 @@
     }
   ],
   "name": "kendoUiMobileApp",
-  "navigation": "tabstrip",
+  "navigation": "drawer",
   "view": "home",
-  "transition": "slide",
-  "showMoreTab": true,
   "skin": "nova",
   "skinMainColor": "#32364c",
   "skinTextColor": "#ffffff",
