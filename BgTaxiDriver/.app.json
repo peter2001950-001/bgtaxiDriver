@@ -4,13 +4,42 @@
     {
       "type": "kendo-ui-mobile:view",
       "name": "home",
-      "components": [],
+      "components": [
+        {
+          "type": "kendo-ui-mobile:authentication",
+          "name": "homeModel",
+          "dataProvider": "bgTaxiDriver",
+          "enableRegistration": true,
+          "gotoRegisterLabel": "Регистрация",
+          "registerEmailLabel": "Email",
+          "registerPasswordLabel": "Парола",
+          "registerNameLabel": "Име",
+          "registerLabel": "Напред",
+          "registerRedirect": "home",
+          "gotoSigninLabel": "Вход",
+          "enableLogout": true,
+          "logoutLabel": "Изход",
+          "enableRememberme": false,
+          "emailLabel": "Email",
+          "passwordLabel": "Парола",
+          "signinLabel": "Напред",
+          "signinRedirect": "home"
+        }
+      ],
       "title": "Home View",
-      "addToNavigation": true,
-      "icon": "home"
+      "addToNavigation": false
     }
   ],
-  "dataProviders": [],
+  "dataProviders": [
+    {
+      "type": "kendo-ui-mobile:dataProvider",
+      "name": "bgTaxiDriver",
+      "title": "BgTaxiDriver / BgTaxiDriver",
+      "source": "everlive",
+      "everliveKey": "g3zzzntab23m2ln2",
+      "offlineStorage": true
+    }
+  ],
   "name": "kendoUiMobileApp",
   "navigation": "tabstrip",
   "view": "home",
