@@ -36,6 +36,20 @@
       "title": "Main View",
       "addToNavigation": true,
       "icon": "home"
+    },
+    {
+      "type": "kendo-ui-mobile:view",
+      "name": "requestsView",
+      "components": [],
+      "title": "Requests View",
+      "addToNavigation": false
+    },
+    {
+      "type": "kendo-ui-mobile:view",
+      "name": "currentRequestView",
+      "components": [],
+      "title": "CurrentRequest View",
+      "addToNavigation": false
     }
   ],
   "dataProviders": [

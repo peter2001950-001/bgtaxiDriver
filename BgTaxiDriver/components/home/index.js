@@ -1,7 +1,7 @@
 'use strict';
 
 app.home = kendo.observable({
-    onShow: function() {if(localStorage.getItem("bgTaxiDriver_Auth_authData_homeView") != undefined || app["bgTaxDriver_Auth_authData_homeView"] != undefined){
+    onShow: function() {if(localStorage.getItem("bgTaxiDriver_Auth_authData_homeView") != undefined || app["bgTaxiDriver_Auth_authData_homeView"] != undefined){
      app.mobileApp.navigate('components/mainView/view.html');
        }},
     afterShow: function() {}
@@ -54,16 +54,6 @@ app.home = kendo.observable({
         successHandler = function(data) {
             var redirect = mode === 'signin' ? signinRedirect : registerRedirect,
                 model = data;
-                logout = model.logout;
-
-            if (logout) {
-                model.set('logout', null);
-            }
-            if (data && data.result) {
-                if (logout) {
-                    provider.Users.logout(init, init);
-                    return;
-                }
 
                 var rememberedData = {		
                     email: model.email,		
@@ -81,9 +71,7 @@ app.home = kendo.observable({
                 setTimeout(function() {
                     app.mobileApp.navigate('components/' + redirect + '/view.html');
                 }, 0);
-            } else {
-                init();
-            }
+            
         },
         homeModel = kendo.observable({
             displayName: '',
