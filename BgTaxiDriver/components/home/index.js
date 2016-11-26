@@ -2,7 +2,33 @@
 
 app.home = kendo.observable({
     onShow: function() {if(localStorage.getItem("bgTaxiDriver_Auth_authData_homeView") != undefined || app["bgTaxiDriver_Auth_authData_homeView"] != undefined){
-     app.mobileApp.navigate('components/mainView/view.html');
+       var userAndPass = JSON.parse(localStorage.getItem("bgTaxiDriver_Auth_authData_homeView"));
+    $.ajax({
+
+                    url: "http://bgtaxi.net/Account/LoginExternal?email=" + userAndPass.email + "&password=" + userAndPass.password + "&requiredRoleId=2",
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (status) {
+                        if (status.status == "OK") {
+                         app.mobileApp.navigate('components/mainView/view.html');
+                        } else if (status.status == "ROLE NOT MATCH"){
+                               model.set('errorMessage', 'Този акаунт няма права да използва това приложение.');
+                        }else if (status.status == "NO COMPANY"){
+                               model.set('errorMessage', 'Този акаунт не отговаря на фирма.');
+                        }else if (status.status == "NO CAR"){
+                               model.set('errorMessage', 'Този акаунт няма съответстващ автомобил');
+                        }else if (status.status == "NO EMAIL"){
+                               model.set('errorMessage', 'Този акаунт не е активиран. Проверете вашата поща');
+                        }else if(status.status == "ERR"){
+                                model.set('errorMessage', 'Не беше намерен акаунт с посочените имейл и парола');
+                        }
+                    },
+                    error: function () {
+                        $("#messageBox").html("Error");
+                        alert("error comunicating with serveer");
+                    }
+                });
        }},
     afterShow: function() {}
 });
@@ -108,7 +134,7 @@ app.home = kendo.observable({
                 }
 
                  $.ajax({
-                    url: "http://peter200195-001-site1.btempurl.com/Account/LoginExternal?email=" + email + "&password=" + password + "&requiredRoleId=06dee2c8-82df-42c5-9532-41adc70541f1",
+                    url: "http://bgtaxi.net/Account/LoginExternal?email=" + email + "&password=" + password + "&requiredRoleId=2",
                     type: "POST",
                     dataType: "json",
                     contentType: "application/json",
@@ -124,8 +150,15 @@ app.home = kendo.observable({
                             successHandler(rememberedData);
                         } else if (status.status == "ROLE NOT MATCH"){
                                model.set('errorMessage', 'Този акаунт няма права да използва това приложение.');
+                        }else if (status.status == "NO COMPANY"){
+                               model.set('errorMessage', 'Този акаунт не отговаря на фирма.');
+                        }else if (status.status == "NO CAR"){
+                               model.set('errorMessage', 'Този акаунт няма съответстващ автомобил');
+                        }else if (status.status == "NO EMAIL"){
+                               model.set('errorMessage', 'Този акаунт не е активиран. Проверете вашата поща');
+                        }else if(status.status == "ERR"){
+                                model.set('errorMessage', 'Не беше намерен акаунт с посочените имейл и парола');
                         }else{
-
                             init();
                         }
                     },
