@@ -99,8 +99,8 @@
 }());
 
 function logout(){
-     localStorage.removeItem("bgTaxiDriver_Auth_authData_homeView");
-    app["bgTaxiDriver_Auth_authData_homeView"] = null;
+     localStorage.removeItem("basicAuth");
+    app["basicAuth"] = null;
      app.mobileApp.navigate('components/home/view.html');
 }
 
