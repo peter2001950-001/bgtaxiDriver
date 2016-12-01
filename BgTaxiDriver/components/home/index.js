@@ -1,28 +1,18 @@
 'use strict';
 
 app.home = kendo.observable({
-    onShow: function() {if(localStorage.getItem("bgTaxiDriver_Auth_authData_homeView") != undefined || app["bgTaxiDriver_Auth_authData_homeView"] != undefined){
-       var userAndPass = JSON.parse(localStorage.getItem("bgTaxiDriver_Auth_authData_homeView"));
+    onShow: function() {if(localStorage.getItem("basicAuth") != undefined || app["basicAuth"] != undefined){
+       var userAndPass = localStorage.getItem("basicAuth");
     $.ajax({
 
-                    url: "http://bgtaxi.net/Account/LoginExternal?email=" + userAndPass.email + "&password=" + userAndPass.password + "&requiredRoleId=2",
+                    url: "http://bgtaxi.net/Account/LoginExternal?basicAuth="+ userAndPass + "&requiredRoleId=2",
                     type: "POST",
                     dataType: "json",
                     contentType: "application/json",
                     success: function (status) {
                         if (status.status == "OK") {
                          app.mobileApp.navigate('components/mainView/view.html');
-                        } else if (status.status == "ROLE NOT MATCH"){
-                               model.set('errorMessage', 'Този акаунт няма права да използва това приложение.');
-                        }else if (status.status == "NO COMPANY"){
-                               model.set('errorMessage', 'Този акаунт не отговаря на фирма.');
-                        }else if (status.status == "NO CAR"){
-                               model.set('errorMessage', 'Този акаунт няма съответстващ автомобил');
-                        }else if (status.status == "NO EMAIL"){
-                               model.set('errorMessage', 'Този акаунт не е активиран. Проверете вашата поща');
-                        }else if(status.status == "ERR"){
-                                model.set('errorMessage', 'Не беше намерен акаунт с посочените имейл и парола');
-                        }
+                        } 
                     },
                     error: function () {
                         $("#messageBox").html("Error");
@@ -81,17 +71,22 @@ app.home = kendo.observable({
             var redirect = mode === 'signin' ? signinRedirect : registerRedirect,
                 model = data;
 
-                var rememberedData = {		
-                    email: model.email,		
-                    password: model.password		
-                };		
-                if (model.rememberme && rememberedData.email && rememberedData.password) {		
-                    if (localStorage) {		
-                        localStorage.setItem(rememberKey, JSON.stringify(rememberedData));		
-                    } else {		
-                        app[rememberKey] = rememberedData;		
-                    }		
-                }
+                var tok = model.email + ':' + model.password;
+                var hash = btoa(tok);
+                localStorage.setItem("basicAuth",hash);
+                app["basicAuth"] = hash
+
+                // var rememberedData = {		
+                //     email: model.email,		
+                //     password: model.password		
+                // };		
+                // if (model.rememberme && rememberedData.email && rememberedData.password) {		
+                //     if (localStorage) {		
+                //         localStorage.setItem(rememberKey, JSON.stringify(rememberedData));		
+                //     } else {		
+                //         app[rememberKey] = rememberedData;		
+                //     }		
+                // }
                 app.user = data.result;
 
                 setTimeout(function() {
@@ -133,8 +128,10 @@ app.home = kendo.observable({
                     return false;
                 }
 
+                var tok1 = model.email + ':' + model.password;
+                var hash1 = btoa(tok1);
                  $.ajax({
-                    url: "http://bgtaxi.net/Account/LoginExternal?email=" + email + "&password=" + password + "&requiredRoleId=2",
+                    url: "http://bgtaxi.net/Account/LoginExternal?basicAuth=" + hash1  + "&requiredRoleId=2",
                     type: "POST",
                     dataType: "json",
                     contentType: "application/json",
@@ -151,7 +148,9 @@ app.home = kendo.observable({
                         } else if (status.status == "ROLE NOT MATCH"){
                                model.set('errorMessage', 'Този акаунт няма права да използва това приложение.');
                         }else if (status.status == "NO COMPANY"){
+                                localStorage.setItem("basicAuth",hash1);
                                model.set('errorMessage', 'Този акаунт не отговаря на фирма.');
+                               app.mobileApp.navigate('components/companyCodeView/view.html');
                         }else if (status.status == "NO CAR"){
                                model.set('errorMessage', 'Този акаунт няма съответстващ автомобил');
                         }else if (status.status == "NO EMAIL"){

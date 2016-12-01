@@ -50,6 +50,43 @@
       "components": [],
       "title": "CurrentRequest View",
       "addToNavigation": false
+    },
+    {
+      "type": "kendo-ui-mobile:view",
+      "name": "companyCodeView",
+      "components": [
+        {
+          "type": "kendo-ui-mobile:form",
+          "components": [
+            {
+              "type": "kendo-ui-mobile:editableListForm",
+              "components": [
+                {
+                  "type": "kendo-ui-mobile:editableListFormField",
+                  "name": "companyCode",
+                  "dataBindingRelationChildren": "[]",
+                  "dataBindingMultipleSelectChildren": "[]",
+                  "title": "Уникален код на фирмата",
+                  "inputType": "text",
+                  "titlePosition": "left",
+                  "inputTextType": "text",
+                  "dataBinding": "DisplayName"
+                }
+              ],
+              "name": "editableListForm",
+              "formType": "add"
+            }
+          ],
+          "name": "companyCodeViewModel",
+          "enableDataBinding": true,
+          "dataProvider": "bgTaxiDriver",
+          "collection": "Users",
+          "submitButton": "Запази",
+          "cancelButton": "Откажи"
+        }
+      ],
+      "title": "Фирма",
+      "addToNavigation": false
     }
   ],
   "dataProviders": [

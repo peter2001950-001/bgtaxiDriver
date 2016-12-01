@@ -20,6 +20,7 @@ function clickRow(element) {
         contentType: "application/json",
         success: function (status) {
             if (status.status = "OK") {
+                hideMessage();
                 var uluru = { lat: status.lat, lng: status.lon };
                 var map = new google.maps.Map(document.getElementById('modal-map'), {
                     zoom: 16,
@@ -45,15 +46,20 @@ function modalClosed() {
     startSearching();
 }
 function acceptRequest() {
+    var longitude = getFromLocalStorage("currentLon");
+    var latitude = getFromLocalStorage("currentLat");
     $.ajax({
-        url: "http://bgtaxi.net/request/takeRequest?carID=4&requestID=" + getFromLocalStorage("selectedRequestId"),
+        url: "http://bgtaxi.net/request/takeRequest?basicAuth=" + getFromLocalStorage("basicAuth")+ "&requestID=" + getFromLocalStorage("selectedRequestId") + "&lon=" +longitude + "&lat="+latitude ,
         type: "POST",
         dataType: "json",
         contentType: "application/json",
         success: function (status) {
-            if (status.result = "OK") {
+            if (status.status = "OK") {
+                hideMessage();
                 $('#myModal').modal('hide');
                 app.mobileApp.navigate('components/currentRequestView/view.html');
+            }else if (status.status == "REMOVED"){
+                alert("Заявката е вече приета от друг шофьор");
             }
         },
         error: function () {
@@ -63,11 +69,11 @@ function acceptRequest() {
 }
 
 function startSearching() {
-    timer = setInterval(function () {
-        var userAndPass = JSON.parse(getFromLocalStorage("bgTaxiDriver_Auth_authData_homeView"));
-        var tok = userAndPass.email + ':' + userAndPass.password;
-        var hash = btoa(tok);
-        navigator.geolocation.getCurrentPosition(geoSuccess, geoError, { timeout: 45000 });
+    search();
+    timer = setInterval(search, 3000);
+    function search() {
+       
+        navigator.geolocation.getCurrentPosition(geoSuccess, geoError, { timeout: 5000 });
 
         function geoSuccess(position) {
             var positionCou = position.coords;
@@ -75,13 +81,18 @@ function startSearching() {
             saveInLocalStorage("currentLon", positionCou.longitude);
             saveInLocalStorage("currentLat", positionCou.latitude);
             $.ajax({
-                url: "http://bgtaxi.net/request/approRequest?lon=" + positionCou.longitude + "&lat=" + positionCou.latitude + "&basicAuth=" + hash,
+                url: "http://bgtaxi.net/request/approRequest?lon=" + positionCou.longitude + "&lat=" + positionCou.latitude + "&basicAuth=" + getFromLocalStorage("basicAuth"),
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
                 success: function (status) {
                     if (status.status = "OK") {
+                        hideMessage();
                         AddToTable(status.requests);
+                    }else if(status.status == "NO PERMISSIION"){
+                        alert("Грешка при удостоверяването на съмоличността");
+                        removeFromLocalStorage("basicAuth");
+                    app.mobileApp.navigate('components/home/view.html');
                     }
                 },
                 error: function () {
@@ -89,11 +100,11 @@ function startSearching() {
                 }
             });
         }
-
-    }, 3000);
-    function geoError() {
-        alertMessage("Не могат да се определят GPS кординати!", "Грешка", "danger");
+        function geoError() {
+        alertMessage("Търсене на GPS сигнал ...", "Грешка", "danger");
     }
+    }
+    
 }
 
 
@@ -120,10 +131,16 @@ function removeFromLocalStorage(key) {
 }
 function alertMessage(message, strong, typeOf) {
     var element = document.getElementById("messageBox");
+
+    element.style.visibility = "visibile";
     element.className = "alert alert-" + typeOf;
     element.innerHTML = "<strong>" + strong + "</strong> " + message;
 
     document.getElementById('loading').style.visibility = "hidden";
+}
+function hideMessage(){
+    var element = document.getElementById("messageBox");
+    element.style.visibility = "hidden";
 }
 
 function AddToTable(data) {
