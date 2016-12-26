@@ -49,11 +49,12 @@ function acceptRequest() {
     var longitude = getFromLocalStorage("currentLon");
     var latitude = getFromLocalStorage("currentLat");
     $.ajax({
-        url: "http://bgtaxi.net/request/takeRequest?basicAuth=" + getFromLocalStorage("basicAuth")+ "&requestID=" + getFromLocalStorage("selectedRequestId") + "&lon=" +longitude + "&lat="+latitude ,
+        url: "http://bgtaxi.net/request/takeRequest?accessToken=" + getFromLocalStorage("accessToken")+ "&requestID=" + getFromLocalStorage("selectedRequestId") + "&lon=" +longitude + "&lat="+latitude ,
         type: "POST",
         dataType: "json",
         contentType: "application/json",
         success: function (status) {
+            saveInLocalStorage("accessToken", status.accessToken);
             if (status.status = "OK") {
                 hideMessage();
                 $('#myModal').modal('hide');
@@ -81,11 +82,12 @@ function startSearching() {
             saveInLocalStorage("currentLon", positionCou.longitude);
             saveInLocalStorage("currentLat", positionCou.latitude);
             $.ajax({
-                url: "http://bgtaxi.net/request/approRequest?lon=" + positionCou.longitude + "&lat=" + positionCou.latitude + "&basicAuth=" + getFromLocalStorage("basicAuth"),
+                url: "http://bgtaxi.net/request/approRequest?lon=" + positionCou.longitude + "&lat=" + positionCou.latitude + "&accessToken=" + getFromLocalStorage("accessToken"),
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
                 success: function (status) {
+                saveInLocalStorage("accessToken", status.accessToken);
                     if (status.status = "OK") {
                         hideMessage();
                         AddToTable(status.requests);
@@ -93,6 +95,8 @@ function startSearching() {
                         alert("Грешка при удостоверяването на съмоличността");
                         removeFromLocalStorage("basicAuth");
                     app.mobileApp.navigate('components/home/view.html');
+                    }else if(satus.status =="INVALID ACCESSTOKEN"){
+                        alert("INVALID ACCESSTOKEN");
                     }
                 },
                 error: function () {

@@ -1,24 +1,13 @@
 'use strict';
 
 app.home = kendo.observable({
-    onShow: function() {if(localStorage.getItem("basicAuth") != undefined || app["basicAuth"] != undefined){
-       var userAndPass = localStorage.getItem("basicAuth");
-    $.ajax({
-
-                    url: "http://bgtaxi.net/Account/LoginExternal?basicAuth="+ userAndPass + "&requiredRoleId=2",
-                    type: "POST",
-                    dataType: "json",
-                    contentType: "application/json",
-                    success: function (status) {
-                        if (status.status == "OK") {
-                         app.mobileApp.navigate('components/mainView/view.html');
-                        } 
-                    },
-                    error: function () {
-                        $("#messageBox").html("Error");
-                        alert("error comunicating with serveer");
-                    }
-                });
+    onShow: function() {
+        // document.getElementById("appDrawer").style.visibility = "hidden";
+        if(getFromLocalStorage("accessToken") == "undefined" || getFromLocalStorage("accessToken") == null){
+            startWorker();
+        }
+        if(localStorage.getItem("user") != undefined || app["user"] != undefined){
+            app.mobileApp.navigate('components/mainView/view.html');
        }},
     afterShow: function() {}
 });
@@ -71,24 +60,7 @@ app.home = kendo.observable({
             var redirect = mode === 'signin' ? signinRedirect : registerRedirect,
                 model = data;
 
-                var tok = model.email + ':' + model.password;
-                var hash = btoa(tok);
-                localStorage.setItem("basicAuth",hash);
-                app["basicAuth"] = hash
-
-                // var rememberedData = {		
-                //     email: model.email,		
-                //     password: model.password		
-                // };		
-                // if (model.rememberme && rememberedData.email && rememberedData.password) {		
-                //     if (localStorage) {		
-                //         localStorage.setItem(rememberKey, JSON.stringify(rememberedData));		
-                //     } else {		
-                //         app[rememberKey] = rememberedData;		
-                //     }		
-                // }
-                app.user = data.result;
-
+               
                 setTimeout(function() {
                     app.mobileApp.navigate('components/' + redirect + '/view.html');
                 }, 0);
@@ -127,28 +99,30 @@ app.home = kendo.observable({
                 if (!model.validateData(model)) {
                     return false;
                 }
-
+                while(getFromLocalStorage("accessToken") == undefined){
+                    model.set('errorMessage', 'Моля, изчакайте...');
+                }
+                if(getFromLocalStorage("accessToken") == "NONE"){
+                    model.set('errorMessage', 'Възникна грешка при регистирането на устройството!');
+                }else{
                 var tok1 = model.email + ':' + model.password;
                 var hash1 = btoa(tok1);
                  $.ajax({
-                    url: "http://bgtaxi.net/Account/LoginExternal?basicAuth=" + hash1  + "&requiredRoleId=2",
+                    url: "http://bgtaxi.net/Account/LoginExternal?accessToken=" + getFromLocalStorage("accessToken")  + "&basicAuth=" +hash1+ "&requiredRoleId=2",
                     type: "POST",
                     dataType: "json",
                     contentType: "application/json",
                     success: function (status) {
+
+                            saveInLocalStorage("accessToken", status.accessToken);
                         if (status.status == "OK") {
-                
-                            var rememberedData = {
-                                email: email,
-                                password: password,
-                                result: email,
-                                rememberme: true
-                            };
-                            successHandler(rememberedData);
+                            saveInLocalStorage("user", true);
+                            app.mobileApp.navigate('components/mainView/view.html');
                         } else if (status.status == "ROLE NOT MATCH"){
                                model.set('errorMessage', 'Този акаунт няма права да използва това приложение.');
+                        } else if (status.status == "USER LOGGED IN"){
+                               model.set('errorMessage', 'Този акаунт се използва от друго устройство.');
                         }else if (status.status == "NO COMPANY"){
-                                localStorage.setItem("basicAuth",hash1);
                                model.set('errorMessage', 'Този акаунт не отговаря на фирма.');
                                app.mobileApp.navigate('components/companyCodeView/view.html');
                         }else if (status.status == "NO CAR"){
@@ -166,7 +140,7 @@ app.home = kendo.observable({
                         alert("error comunicating with serveer");
                     }
                 });
-
+                }
             },
             register: function() {
                 var model = homeModel,
@@ -196,7 +170,7 @@ app.home = kendo.observable({
                                 result: displayName,
                                 rememberme: true
                             };
-                            successHandler(rememberedData);
+                            app.mobileApp.navigate('components/mainView/view.html');
                         } else {
                             init();
                         }
@@ -229,6 +203,29 @@ app.home = kendo.observable({
     });
 })(app.home);
 
+function getFromLocalStorage(key) {
+    if (localStorage) {
+        return localStorage.getItem(key);
+    } else {
+        return app[key];
+    }
+}
+function saveInLocalStorage(key, info) {
+    if (localStorage) {
+        localStorage.setItem(key, info);
+    } else {
+        app[key] = info;
+    }
+}
+function startWorker(){
+    var w = new Worker("device_register.js");
+             w.onmessage = function(event) {
+           localStorage.setItem("accessToken", event.data);
+                app["accessToken"] = event.data
+                w.terminate();
+                w = undefined;
+        };
+}
 // START_CUSTOM_CODE_homeModel
 // Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes
 

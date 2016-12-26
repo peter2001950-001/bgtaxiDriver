@@ -15,12 +15,11 @@
     <script src="kendo/js/jquery.min.js"></script>
     <script src="kendo/js/kendo.mobile.min.js"></script>
     <script src="app.js"></script>
-
     <script src="bootstrap.min.js"></script>
     <script src="bower_components/everlive/min/everlive.all.min.js"></script>
     <script src="dataProviders/bgTaxiDriver.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqFT1vjwghgVYc9Y_jbuD-ux10qQD9H0s">
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxVBJKfqSf3Q2abrlW1tyuidln06ytXmM" async defer></script>
+  
 </head>
 
 <body id="kendoUiMobileApp">
@@ -46,7 +45,7 @@
         </header>
     </div>
 
-    <div id="appDrawer" data-role="drawer" data-title="Navigation">
+    <div id="appDrawer" data-role="drawer" data-title="Навигация">
         <header data-role="header">
             <div data-role="navbar">
                 <span data-role="view-title"></span>
@@ -54,7 +53,7 @@
         </header>
         <ul id="navigation-container" data-role="listview">
 
-            <li><a href="components/mainView/view.html" data-icon="home">Main View</a></li>
+            <li><a href="components/mainView/view.html" data-icon="home">Основен панел</a></li>
 
             <li id="homeModellogout"><a onclick="logout()" data-position="end" data-icon="action">Изход</a></li>
         </ul>

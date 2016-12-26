@@ -20,11 +20,13 @@ function updating(){
             saveInLocalStorage("currentLon", positionCou.longitude);
             saveInLocalStorage("currentLat", positionCou.latitude);
             $.ajax({
-                url: "http://bgtaxi.net/request/updateStatus?lon=" + positionCou.longitude + "&lat=" + positionCou.latitude + "&basicAuth=" + getFromLocalStorage("basicAuth") + "&requestId=" + requestId +  "&onAddress=" + onAddress,
+                url: "http://bgtaxi.net/request/updateStatus?lon=" + positionCou.longitude + "&lat=" + positionCou.latitude + "&accessToken=" + getFromLocalStorage("accessToken") + "&requestId=" + requestId +  "&onAddress=" + onAddress,
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
                 success: function (status) {
+
+            saveInLocalStorage("accessToken", status.accessToken);
                     if (status.status = "OK") {
                         var box = document.getElementById("clientStatus");
                         if(status.clientInformed){
@@ -57,23 +59,24 @@ function updating(){
 }
 function onAddressFunc(){
     if(!onAddress){
-    onAddress = true;
-   var button=  document.getElementsByClassName("btn")[0];
-   button.innerHTML = "ВРЪЗКА С КЛИЕНТ";
-   button.className = "btn btn-success";
-    }else{
+        onAddress=true;
+    $(".btn-primary").remove();
+    $(".btn-danger").css("visibility", "visible");
+
+}}
+function finish(){
     onAddress = false;
    var button=  document.getElementsByClassName("btn")[0];
    button.innerHTML = "НА АДРЕСА";
    button.className = "btn btn-primary";
         $.ajax({
-                url: "http://bgtaxi.net/request/finishRequest?requestId=" + getFromLocalStorage("selectedRequestId") + "&basicAuth=" + getFromLocalStorage("basicAuth"),
+                url: "http://bgtaxi.net/request/finishRequest?requestId=" + getFromLocalStorage("selectedRequestId") + "&accessToken=" + getFromLocalStorage("accessToken"),
                 type: "POST",
                 dataType: "json",
                 contentType: "application/json",
                 success: function (status) {
                     if (status.status = "OK") {
-
+            saveInLocalStorage("accessToken", status.accessToken);
                         clearInterval(timer);
                         removeFromLocalStorage("selectedRequestId");
                         removeFromLocalStorage("currentLon");
@@ -91,7 +94,7 @@ function onAddressFunc(){
                 }
             });
     }
-}
+
 
 
 function saveInLocalStorage(key, info) {
