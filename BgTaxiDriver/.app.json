@@ -9,25 +9,18 @@
           "type": "kendo-ui-mobile:authentication",
           "name": "homeModel",
           "dataProvider": "bgTaxiDriver",
-          "enableRegistration": true,
-          "gotoRegisterLabel": "Регистрация",
-          "registerEmailLabel": "Email",
-          "registerPasswordLabel": "Парола",
-          "registerNameLabel": "Име",
-          "registerLabel": "Напред",
-          "registerRedirect": "mainView",
-          "gotoSigninLabel": "Вход",
-          "enableLogout": true,
-          "logoutLabel": "Изход",
+          "enableRegistration": false,
+          "enableLogout": false,
           "enableRememberme": false,
-          "emailLabel": "Email",
+          "emailLabel": "Имейл",
           "passwordLabel": "Парола",
           "signinLabel": "Напред",
           "signinRedirect": "mainView"
         }
       ],
-      "title": "Home View",
-      "addToNavigation": false
+      "title": "Вход",
+      "addToNavigation": true,
+      "icon": "home"
     },
     {
       "type": "kendo-ui-mobile:view",
@@ -93,17 +86,17 @@
     {
       "type": "kendo-ui-mobile:dataProvider",
       "name": "bgTaxiDriver",
-      "title": "BgTaxiDriver / BgTaxiDriver",
       "source": "everlive",
       "everliveKey": "g3zzzntab23m2ln2",
-      "offlineStorage": true
+      "offlineStorage": true,
+      "title": "BgTaxiDriver / BgTaxiDriver"
     }
   ],
   "name": "kendoUiMobileApp",
-  "navigation": "drawer",
+  "navigation": "none",
   "view": "home",
   "skin": "nova",
-  "skinMainColor": "#32364c",
+  "skinMainColor": "#333333",
   "skinTextColor": "#ffffff",
-  "skinAccentColor": "#ff4350"
+  "skinAccentColor": "#ff9900"
 }

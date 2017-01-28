@@ -218,13 +218,14 @@ function saveInLocalStorage(key, info) {
     }
 }
 function startWorker(){
-    var w = new Worker("device_register.js");
-             w.onmessage = function(event) {
-           localStorage.setItem("accessToken", event.data);
-                app["accessToken"] = event.data
-                w.terminate();
-                w = undefined;
-        };
+    localStorage.setItem("accessToken", "a0d4a2cc-fb19-4b67-9523-bd0e4d9a4fce");
+    // var w = new Worker("device_register.js");
+    //          w.onmessage = function(event) {
+    //        localStorage.setItem("accessToken", event.data);
+    //             app["accessToken"] = event.data
+    //             w.terminate();
+    //             w = undefined;
+    //     };
 }
 // START_CUSTOM_CODE_homeModel
 // Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes

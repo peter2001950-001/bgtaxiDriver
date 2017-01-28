@@ -1,58 +1,27 @@
-<div data-role="view" data-title="Вход" data-layout="main-nonav" data-show="app.home.onShow"  data-model="app.home" id="homeScreen" class="screen">
+<div data-role="view" data-title="View" data-layout="main" data-model="app.home" data-show="app.home.onShow" data-after-show="app.home.afterShow" id="homeScreen" class="screen">
     <div class="signin-view screen__content screen__content--signin">
         <form>
             <ul data-role="listview" data-style="inset">
                 <li>
-                    <label>Email
+                    <label><span data-bind="text: strings.home.homeModel.emailLabel"></span>
                         <input type="email" data-bind="value: homeModel.email" required autofocus>
                     </label>
                 </li>
                 <li>
-                    <label>Парола
+                    <label><span data-bind="text: strings.home.homeModel.passwordLabel"></span>
                         <input type="password" data-bind="value: homeModel.password" required>
                     </label>
                 </li>
             </ul>
 
             <div class="button-group button-group-vertical">
-                <a data-role="button" class="primary" data-bind="events: { click: homeModel.signin }">Напред</a>
-
-                <!--<a data-role="button" data-bind="events: { click: homeModel.toggleView }">Регистрация</a>-->
+                <a data-role="button" class="primary" data-bind="events: { click: homeModel.signin }, buttonText: strings.home.homeModel.signinLabel"></a>
 
             </div>
 
             <span class="status" data-bind="text: homeModel.errorMessage"></span>
         </form>
     </div>
-    <div class="signup-view screen__content screen__content--signup" style="display:none;">
-        <form>
-            <ul data-role="listview" data-style="inset">
-                <li>
-                    <label>Email
-                        <input type="email" data-bind="value: homeModel.email" required>
-                    </label>
-                </li>
-                <li>
-                    <label>Парола
-                        <input type="password" data-bind="value: homeModel.password">
-                    </label>
-                </li>
-                <li>
-                    <label>Име
-                        <input type="text" data-bind="value: homeModel.displayName">
-                    </label>
-                </li>
-            </ul>
-            <div class="button-group button-group-vertical">
-                <a class="primary" data-role="button" data-bind="events: { click: homeModel.register }">Напред</a>
-                <a data-role="button" data-bind="events: { click: homeModel.toggleView }">Вход</a>
-            </div>
-
-            <span class="status" data-bind="text: homeModel.errorMessage"></span>
-        </form>
-    </div>
-    
-<script src='https://www.google.com/recaptcha/api.js'></script>
     <div class="offline" align="center" style="display:none;">
         You are currently offline. Before using this app in offline mode you must initialize it while you are online
     </div>
@@ -60,6 +29,14 @@
     <!-- Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes -->
 
     <!-- END_CUSTOM_CODE_homeModel -->
+    <header data-role="header">
+        <div data-role="navbar" class="header-text">
+
+            <span data-bind="text: strings.home.title"></span>
+
+        </div>
+    </header>
+
 
     <!-- START_CUSTOM_CODE_home -->
     <!-- Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes -->

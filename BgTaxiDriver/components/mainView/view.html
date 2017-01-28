@@ -1,10 +1,28 @@
-<div data-role="view" data-title="Основен панел" data-layout="main" data-model="app.mainView" data-show="app.mainView.onShow" data-after-show="app.mainView.afterShow" id="mainViewScreen" class="screen">
+<div data-role="view" data-title="View" data-layout="main" data-model="app.mainView" data-show="app.mainView.onShow" data-after-show="app.mainView.afterShow"
+    id="mainViewScreen" class="screen">
+    <header class="nav-header">
+        <div class="header-status">
+            <h2 class="header-status-text" style="padding: 6px;color: white;">Колата е СВОБОДНА</h3>
+        </div>
+        <div class = "header-user" > 
+            <h3 class ="header-user-text" style="padding: 6px;color: white;">Петър Бечев (№566)</h3>
+        </div>
+    </header>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6 col-md-6"><div class = "nav-button">ОТСЪСТВАМ</div>
+            </div>
+            <div class="col-xs-6 col-md-6"><div class = "nav-button">КАРТА</div>
+            </div>
+            </div>
+            <div class="row">
+            <div class="col-xs-6 col-md-6"><div class = "nav-button">МОЯТ ПРОФИЛ</div>
+            </div>
+            <div class="col-xs-6 col-md-6 "><div class = "nav-button">ИЗХОД</div>
+            </div>
+            </div>
+     </div>   
 
-    <div style="width: 220px; margin: 50px auto;"> 
-        <button id="callTBtn" type="button" onclick="searchForRequests()" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Изпращане"
-         style="width:100%; height: 220px; border-radius:50%; font-size: 25px; background-color:#a5a5a5; color:white;" data-role="button" 
-          class="btn btn-warning btn-lg" >Търси<br>заявки</button>  
-    </div>
 
     <!-- START_CUSTOM_CODE_mainView -->
     <!-- Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes -->

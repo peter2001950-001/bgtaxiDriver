@@ -1,25 +1,15 @@
-<div data-role="view" data-title="Търсене на заявки" data-layout="main-nonav"  data-show="app.requestsView.onShow" data-after-show="app.requestsView.afterShow" data-model="app.requestsView" id="requestsViewScreen" class="screen">
+<div data-role="view" data-title="View" data-layout="main-nonav" data-model="app.requestsView" data-show="app.requestsView.onShow" data-after-show="app.requestsView.afterShow" id="requestsViewScreen" class="screen">
+    <header data-role="header">
+        <div data-role="navbar" class="header-text">
 
-    <table id = "table" class="table table-striped">
-       <thead> 
-        <th>№</th>
-        <th>Адрес на заявката</th>
-        <th>Приблизително разстояние</th>
-        <th>Статус</th>
-        <tbody>
-            <tbody id="tableBody">
+            <span data-bind="text: strings.requestsView.title"></span>
 
-            </tbody>
-    </table>
-    <div id="messageBox" class="alert"></div>
+        </div>
+    </header>
 
-   
-    
 
     <!-- START_CUSTOM_CODE_requestsView -->
     <!-- Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes -->
 
     <!-- END_CUSTOM_CODE_requestsView -->
 </div>
-
- 

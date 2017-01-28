@@ -1,6 +1,5 @@
 {
   "CorePlugins": [
-    "com.telerik.plugin.telerikanalytics@3.4.1",
     "cordova-plugin-battery-status",
     "cordova-plugin-camera",
     "cordova-plugin-console",
@@ -20,6 +19,14 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "cordova-plugin-vibration",
-    "cordova-plugin-whitelist"
-  ]
+    "cordova-plugin-whitelist",
+    "com.telerik.plugin.telerikanalytics@3.4.1"
+  ],
+  "CordovaPluginVariables": {
+    "com.telerik.plugin.telerikanalytics": {
+      "AUTO_TRACK_EXCEPTIONS": "True",
+      "AUTO_TRACK_KENDO_EVENTS": "True",
+      "PRODUCT_ID": "030f1338c4a94769810ad5243099ddd4"
+    }
+  }
 }

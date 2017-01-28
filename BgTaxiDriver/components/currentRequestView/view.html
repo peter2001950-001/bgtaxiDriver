@@ -1,13 +1,13 @@
-<div data-role="view" data-title="Текуща заявка" data-layout="main-nonav" data-model="app.currentRequestView" data-show="app.currentRequestView.onShow" data-after-show="app.currentRequestView.afterShow" id="currentRequestViewScreen" class="screen">
+<div data-role="view" data-title="View" data-layout="main-nonav" data-model="app.currentRequestView" data-show="app.currentRequestView.onShow" data-after-show="app.currentRequestView.afterShow" id="currentRequestViewScreen" class="screen">
+    <header data-role="header">
+        <div data-role="navbar" class="header-text">
 
-    <h1 style="color:green; text-align:center; font-size: 30px;">Заявката приета УСПЕШНО!</h1>
-    <h2 style="text-align:center;" id = "accepted-address"></h2>
-    <span style="margin: 20px 0 10px 10px;" id = "clientStatus"></span>
+            <span data-bind="text: strings.currentRequestView.title"></span>
 
-    <div id="messageBox" class="alert"></div>
-    <button style = "width: 40%; height:70px; font-size:20px; margin: 20px 30%" class = "btn btn-primary" onclick="onAddressFunc()">НА АДРЕСА</button>
-    <button style = "width: 40%; height:70px; font-size:20px; margin: 20px 30%; visibility:hidden;" class = "btn btn-danger" onclick="finish()">ВРЪЗКА С КЛИЕНТ</button>
-    
+        </div>
+    </header>
+
+
     <!-- START_CUSTOM_CODE_currentRequestView -->
     <!-- Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes -->
 
