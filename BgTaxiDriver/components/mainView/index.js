@@ -32,7 +32,7 @@ function setInformation() {
 function pullStart() {
     localStorage.setItem("ActivePullRequest", "false");
     search();
-    timer = setInterval(search, 3000);
+    var timer = setInterval(search, 3000);
     function search() {
         if (localStorage.getItem("ActivePullRequest") == "false") {
             localStorage.setItem("ActivePullRequest", "true");
@@ -82,6 +82,9 @@ function alertStatus(message, color , textColor = "#ffffff") {
     text.style.color = textColor;
     var node = text.parentNode;
     node.style.backgroundColor = color;
+}
+function goToMap(){
+       app.mobileApp.navigate('components/requestsView/view.html');
 }
 // START_CUSTOM_CODE_mainView
 // Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes

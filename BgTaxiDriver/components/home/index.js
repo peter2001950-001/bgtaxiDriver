@@ -218,7 +218,7 @@ function saveInLocalStorage(key, info) {
     }
 }
 function startWorker(){
-    localStorage.setItem("accessToken", "a0d4a2cc-fb19-4b67-9523-bd0e4d9a4fce");
+    localStorage.setItem("accessToken", "10eb5d70-1b37-4ea0-bc6b-9672ca30ca02");
     // var w = new Worker("device_register.js");
     //          w.onmessage = function(event) {
     //        localStorage.setItem("accessToken", event.data);
