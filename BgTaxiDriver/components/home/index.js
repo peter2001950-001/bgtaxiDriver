@@ -2,13 +2,18 @@
 
 app.home = kendo.observable({
     onShow: function() {
+        saveInLocalStorage("PullStarted", "false");
+        localStorage.setItem("onAddress", "false");
+        localStorage.setItem("absent", "false");
+        localStorage.setItem("free", "false");
         // document.getElementById("appDrawer").style.visibility = "hidden";
         if(getFromLocalStorage("accessToken") == "undefined" || getFromLocalStorage("accessToken") == null){
             startWorker();
-        }
-        if(localStorage.getItem("user") != undefined || app["user"] != undefined){
+        }else if(localStorage.getItem("user") != undefined || app["user"] != undefined){
             app.mobileApp.navigate('components/mainView/view.html');
-       }},
+       }
+       
+       },
     afterShow: function() {}
 });
 
@@ -218,7 +223,7 @@ function saveInLocalStorage(key, info) {
     }
 }
 function startWorker(){
-    localStorage.setItem("accessToken", "10eb5d70-1b37-4ea0-bc6b-9672ca30ca02");
+    localStorage.setItem("accessToken", "83744eae-a0b6-44cc-ac38-a0702d20a623");
     // var w = new Worker("device_register.js");
     //          w.onmessage = function(event) {
     //        localStorage.setItem("accessToken", event.data);

@@ -594,6 +594,7 @@ Fields
 .header-status{
     width: 50%;
     float: left;
+    height: 45px;
 }
 .header-user{
     width: 50%;
@@ -609,9 +610,46 @@ Fields
 }
 .header-status-text{
     text-align: center;
+    font-size: 3vh;
 }
 .header-user-text{
     text-align: right;
+}
+.choice-btn{
+    padding: 25px;
+    border-radius: 5px;
+    float: left;
+    margin: 1.4%;
+    width: 47%;
+    font-size: 5vw;
+
+}
+.small-choice-btn{
+    padding: 25px 5px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1 px #606060;
+    float: left;
+    width: 30.33333%;
+    margin: 0 1.5%;
+    font-size: 3vw;
+    background-color: #f7aa1b;
+}
+.choice-bar{
+    position:fixed;
+   bottom:0;
+   width:100%;
+   padding: 15px 0;
+   
+}
+.choice-yes{
+    background-color: #4ad136;
+    color: white;
+}
+.choice-no{
+background-color: #fc3747;
+    color: white;
+
 }
 .container{
     margin: 4%;
