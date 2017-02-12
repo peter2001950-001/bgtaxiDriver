@@ -6,11 +6,13 @@ app.home = kendo.observable({
         localStorage.setItem("onAddress", "false");
         localStorage.setItem("absent", "false");
         localStorage.setItem("free", "false");
-        // document.getElementById("appDrawer").style.visibility = "hidden";
         if(getFromLocalStorage("accessToken") == "undefined" || getFromLocalStorage("accessToken") == null){
             startWorker();
-        }else if(localStorage.getItem("user") != undefined || app["user"] != undefined){
-            app.mobileApp.navigate('components/mainView/view.html');
+        }
+         if(localStorage.getItem("user") != undefined || app["user"] != undefined){
+
+            console.log("dfsdfs");
+            // app.mobileApp.navigate('components/mainView/view.html');
        }
        
        },

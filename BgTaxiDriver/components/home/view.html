@@ -1,21 +1,21 @@
-<div data-role="view" data-title="View" data-layout="main" data-model="app.home" data-show="app.home.onShow" data-after-show="app.home.afterShow" id="homeScreen" class="screen">
+<div data-role="view" data-title="View" data-layout="main1" data-model="app.home" data-show="app.home.onShow" data-after-show="app.home.afterShow" class="screen">
     <div class="signin-view screen__content screen__content--signin">
         <form>
             <ul data-role="listview" data-style="inset">
                 <li>
-                    <label><span data-bind="text: strings.home.homeModel.emailLabel"></span>
+                    <label><span data-bind="text: strings.home.homeModel.emailLabel"> Имейл</span>
                         <input type="email" data-bind="value: homeModel.email" required autofocus>
                     </label>
                 </li>
                 <li>
-                    <label><span data-bind="text: strings.home.homeModel.passwordLabel"></span>
+                    <label><span data-bind="text: strings.home.homeModel.passwordLabel">Парола</span>
                         <input type="password" data-bind="value: homeModel.password" required>
                     </label>
                 </li>
             </ul>
 
             <div class="button-group button-group-vertical">
-                <a data-role="button" class="primary" data-bind="events: { click: homeModel.signin }, buttonText: strings.home.homeModel.signinLabel"></a>
+                <a data-role="button" class="primary" data-bind="events: { click: homeModel.signin }, buttonText: strings.home.homeModel.signinLabel">Напред</a>
 
             </div>
 

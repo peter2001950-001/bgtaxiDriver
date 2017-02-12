@@ -2,7 +2,9 @@
 
 app.requestsView = kendo.observable({
     onShow: function() {
-     document.getElementById("viewScreen").style.height = (document.body.offsetHeight -45) + "px";
+        console.log("requestsView shown");
+     document.getElementById("RequestViewScreen").style.height = (document.body.offsetHeight -45) + "px";
+     localStorage.setItem("answerOpened", "true");
      document.getElementsByClassName("choice-no")[0].innerHTML = "НЕ (15)";
      document.getElementById("start-address").innerHTML = getFromLocalStorage("currentRequestStartAddress");
       document.getElementById("finish-address").innerHTML = "ЗА: " + getFromLocalStorage("currentRequestFinishAddress");
@@ -15,16 +17,13 @@ app.localization.registerView('requestsView');
 
 function answer(bool){
     if(bool){
-        while(getFromLocalStorage("ActiveRequest") == "true"){
             alertStatus("Приемане на заявката...", "#FFFFFF" , "#000000" );
-        }
     }else{
-         while(getFromLocalStorage("ActiveRequest") == "true"){
             alertStatus("Отказване на заявката...", "#FFFFFF" , "#000000" );
-        }
     }
     var waitingInteral = setInterval(function
 (){
+    console.log("waiting....");
     if(getFromLocalStorage("ActiveRequest") == "false"){
         clearInterval(waitingInteral);
         localStorage.setItem("ActiveRequest", "true");
@@ -37,9 +36,15 @@ function answer(bool){
                         localStorage.setItem("accessToken", status.accessToken);
                          localStorage.setItem("ActiveRequest", "false");
                         if (status.status = "OK") {
-                            localStorage.setItem("status", "busy");
+                            if(bool){
+                                 localStorage.setItem("status", "busy");
                                 app.mobileApp.navigate('components/currentRequestView/view.html');
-
+                            }else{
+                                
+                                 localStorage.setItem("status", "free");
+                                app.mobileApp.navigate('components/mainView/view.html');
+                            }
+                            
                         } else if (status.status == "REMOVED") {
                             alert("Срокът за приемане на заявката е изтекъл!");
                             app.mobileApp.navigate('components/mainView/view.html');

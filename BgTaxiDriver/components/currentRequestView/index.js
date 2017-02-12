@@ -2,7 +2,9 @@
 
 app.currentRequestView = kendo.observable({
     onShow: function() {
-        document.getElementById("viewScreen").style.height = (document.body.offsetHeight -58) + "px";
+
+        console.log("Current requestsView shown");
+        document.getElementById("CurrentRequestViewScreen").style.height = (document.body.offsetHeight -58) + "px";
         if(localStorage.getItem("IsOnAddress")== "true"){
              document.getElementById("onAddressBtn").innerHTML = "ВРЪЗКА С КЛИЕНТ";
         }

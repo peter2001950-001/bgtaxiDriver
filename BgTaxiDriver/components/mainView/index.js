@@ -2,16 +2,43 @@
 
 app.mainView = kendo.observable({
     onShow: function () {
-        setInformation();
+        localStorage.setItem("answerOpened", "false");
+        localStorage.setItem("requestOpened", "false");
         if(getFromLocalStorage("PullStarted") != "true"){
-        pullStart();
+        pullRequests.startPull();
         }
     },
     afterShow: function () { }
 });
 app.localization.registerView('mainView');
 
-function setInformation() {
+
+function logout(){
+    pullRequests.stopPull();
+    $.ajax({
+                    url: "http://bgtaxi.net/account/logoutExternal?accessToken=" + getFromLocalStorage("accessToken"),
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json",
+                    success: function (status) {
+                        localStorage.setItem("accessToken", status.accessToken);
+                        if (status.status == "OK") {
+                            localStorage.removeItem("user");
+                        }
+                         localStorage.setItem("ActiveRequest", "false");
+                    },
+                    error: function () {
+                        alertStatus("Проблем при свързването със сървъра", "#167cf9");
+                        localStorage.setItem("ActiveRequest", "false");
+                        
+                    }
+                });
+}
+
+var pullRequests = (function (){
+    var timer;
+
+    function setInformation() {
     var userTb = document.getElementsByClassName("header-user-text")[0];
     userTb.innerHTML = localStorage.getItem("userShortInfo");
     switch (localStorage.getItem("status")) {
@@ -20,7 +47,10 @@ function setInformation() {
             break;
         case "busy":
             alertStatus("ЗАЕТ", "#ff283e");
+            if(localStorage.getItem("requestOpened") == "false"){
+            localStorage.setItem("requestOpened", "true");
             app.mobileApp.navigate('components/currentRequestView/view.html');
+            }
             break;
         case "absent":
             alertStatus("ОТСЪСТВАЩ", "#ffa500" , "#000000");
@@ -32,11 +62,11 @@ function setInformation() {
     }
 }
 
-function pullStart() {
+    function startPull(){
     localStorage.setItem("ActiveRequest", "false");
     localStorage.setItem("PullStarted", "true");
     search();
-    var timer = setInterval(search, 3000);
+    timer = setInterval(search, 3000);
     function search() {
         if (localStorage.getItem("ActiveRequest") == "false") {
             localStorage.setItem("ActiveRequest", "true");
@@ -56,15 +86,15 @@ function pullStart() {
                         localStorage.setItem("accessToken", status.accessToken);
                         if (status.status == "OK") {
                             setInformation();
-                           
-                            console.log(status.request);
                             if(status.request != undefined){
                                 saveInLocalStorage("currentRequestStartAddress", status.request.startAddress);
                                 saveInLocalStorage("currentRequestFinishAddress", status.request.finishAddress);
                                 saveInLocalStorage("currentRequestDistance", status.request.distance);
                                 saveInLocalStorage("currentRequestTime", status.request.time);
                                   saveInLocalStorage("currentRequestId", status.request.id);
+                                  if(localStorage.getItem("answerOpened") == "false"){
                                 app.mobileApp.navigate('components/requestsView/view.html');
+                                  }
                             }
                             if(status.onAddress == true){
                                 localStorage.setItem("onAddress", "false");
@@ -95,7 +125,19 @@ function pullStart() {
         }
     }
 
-}
+    }
+    function stopPull(){
+
+    localStorage.setItem("PullStarted", "false");
+        clearInterval(timer);
+    }
+
+    return{
+        startPull: startPull,
+        stopPull: stopPull
+    }
+}());
+
 
 function alertStatus(message, color , textColor = "#ffffff") {
     var text = document.getElementsByClassName("header-status-text")[0];
