@@ -8,11 +8,9 @@ app.home = kendo.observable({
         localStorage.setItem("free", "false");
         if(getFromLocalStorage("accessToken") == "undefined" || getFromLocalStorage("accessToken") == null){
             startWorker();
-        }
-         if(localStorage.getItem("user") != undefined || app["user"] != undefined){
+        }else if(localStorage.getItem("user") != undefined || app["user"] != undefined){
 
-            console.log("dfsdfs");
-            // app.mobileApp.navigate('components/mainView/view.html');
+            app.mobileApp.navigate('components/mainView/view.html');
        }
        
        },
@@ -26,8 +24,6 @@ app.home = kendo.observable({
 (function(parent) {
     var provider = app.data.bgTaxiDriver,
         mode = 'signin',
-        registerRedirect = 'mainView',
-        signinRedirect = 'mainView',
         rememberKey = 'bgTaxiDriver_Auth_authData_homeView',
         init = function(error, result) {
             $('.status').text('');
@@ -62,16 +58,6 @@ app.home = kendo.observable({
                 model.set('logout', null);
             }
 
-        },
-        successHandler = function(data) {
-            var redirect = mode === 'signin' ? signinRedirect : registerRedirect,
-                model = data;
-
-               
-                setTimeout(function() {
-                    app.mobileApp.navigate('components/' + redirect + '/view.html');
-                }, 0);
-            
         },
         homeModel = kendo.observable({
             displayName: '',
@@ -123,7 +109,15 @@ app.home = kendo.observable({
 
                             saveInLocalStorage("accessToken", status.accessToken);
                         if (status.status == "OK") {
-                            saveInLocalStorage("user", true);
+                            saveInLocalStorage("user", "true");
+                            var userInfo = status.user.firstName + " " + status.user.lastName + " (Кола №" + status.user.carIN + ")";
+                            saveInLocalStorage("userShortInfo", userInfo);
+                            saveInLocalStorage("userFirstName", status.user.firstName);
+                            saveInLocalStorage("userLastName", status.user.lastName);
+                            saveInLocalStorage("carIN", status.user.carIN); 
+                            localStorage.setItem("free", "true");
+                            homeModel.email = "";
+                            homeModel.password = "";
                             app.mobileApp.navigate('components/mainView/view.html');
                         } else if (status.status == "ROLE NOT MATCH"){
                                model.set('errorMessage', 'Този акаунт няма права да използва това приложение.');
@@ -206,7 +200,6 @@ app.home = kendo.observable({
         if (e && e.view && e.view.params && e.view.params.logout) {
             homeModel.set('logout', true);
         }
-        provider.Users.currentUser().then(successHandler, init);
     });
 })(app.home);
 
@@ -225,14 +218,14 @@ function saveInLocalStorage(key, info) {
     }
 }
 function startWorker(){
-    localStorage.setItem("accessToken", "83744eae-a0b6-44cc-ac38-a0702d20a623");
-    // var w = new Worker("device_register.js");
-    //          w.onmessage = function(event) {
-    //        localStorage.setItem("accessToken", event.data);
-    //             app["accessToken"] = event.data
-    //             w.terminate();
-    //             w = undefined;
-    //     };
+   //localStorage.setItem("accessToken", "83744eae-a0b6-44cc-ac38-a0702d20a623");
+    var w = new Worker("device_register.js");
+             w.onmessage = function(event) {
+           localStorage.setItem("accessToken", event.data);
+                app["accessToken"] = event.data
+                w.terminate();
+                w = undefined;
+        };
 }
 // START_CUSTOM_CODE_homeModel
 // Add custom code here. For more information about custom code, see http://docs.telerik.com/platform/screenbuilder/troubleshooting/how-to-keep-custom-code-changes

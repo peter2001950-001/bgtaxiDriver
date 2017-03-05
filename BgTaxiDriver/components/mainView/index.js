@@ -6,6 +6,7 @@ app.mainView = kendo.observable({
         localStorage.setItem("requestOpened", "false");
         if(getFromLocalStorage("PullStarted") != "true"){
         pullRequests.startPull();
+
         }
     },
     afterShow: function () { }
@@ -24,6 +25,11 @@ function logout(){
                         localStorage.setItem("accessToken", status.accessToken);
                         if (status.status == "OK") {
                             localStorage.removeItem("user");
+                            localStorage.removeItem("userShortInfo");
+                            localStorage.removeItem("userFirstName");
+                            localStorage.removeItem("userLastName");
+                            localStorage.removeItem("carIN"); 
+                             app.mobileApp.navigate('components/home/view.html');
                         }
                          localStorage.setItem("ActiveRequest", "false");
                     },
@@ -37,7 +43,10 @@ function logout(){
 
 var pullRequests = (function (){
     var timer;
-
+    var geotimer;
+    var errors = 0;
+    var positionCou;
+    var gpsError = true;
     function setInformation() {
     var userTb = document.getElementsByClassName("header-user-text")[0];
     userTb.innerHTML = localStorage.getItem("userShortInfo");
@@ -54,6 +63,7 @@ var pullRequests = (function (){
             break;
         case "absent":
             alertStatus("ОТСЪСТВАЩ", "#ffa500" , "#000000");
+            document.getElementById("absentFreeBtn").innerHTML = "ВЪРНАХ СЕ";
             break;
         default:
             localStorage.setItem("status", "free");
@@ -62,23 +72,46 @@ var pullRequests = (function (){
     }
 }
 
+    function startTracking(){
+        var done = true;
+        geotimer = setInterval(function(){
+            if(done){
+                done = false;
+            navigator.geolocation.getCurrentPosition(geoSuccess, geoError,  {enableHighAccuracy: true, timeout: 30000 });
+            }
+            function geoSuccess(position) {
+                positionCou = position.coords;
+
+                gpsError = false;
+                done = true;
+                console.log("GPS OK");
+            }
+            function geoError() {
+                gpsError = true;
+                alertStatus("Търсене на GPS сигнал ."+ errors+ ".", "#cccccc");
+
+                console.log("GPS ERROR");
+                errors++;
+                done = true;
+            }
+        }, 1000);
+    }
+    function stopTracking(){
+        clearInterval(geotimer);
+    }
+
     function startPull(){
+        startTracking();
     localStorage.setItem("ActiveRequest", "false");
     localStorage.setItem("PullStarted", "true");
     search();
     timer = setInterval(search, 3000);
     function search() {
-        if (localStorage.getItem("ActiveRequest") == "false") {
+        if (localStorage.getItem("ActiveRequest") == "false" && !gpsError) {
             localStorage.setItem("ActiveRequest", "true");
-            navigator.geolocation.getCurrentPosition(geoSuccess, geoError, { timeout: 5000 });
-
-            function geoSuccess(position) {
-                var positionCou = position.coords;
-
-                saveInLocalStorage("currentLon", positionCou.longitude);
-                saveInLocalStorage("currentLat", positionCou.latitude);
+            
                 $.ajax({
-                    url: "http://bgtaxi.net/request/pull?lon=" + positionCou.longitude + "&lat=" + positionCou.latitude +  "&onAddress=" +  getFromLocalStorage("onAddress") + "&accessToken=" + getFromLocalStorage("accessToken"),
+                    url: "http://bgtaxi.net/request/pull?lon=" + positionCou.longitude + "&lat=" + positionCou.latitude +  "&onAddress=" +  getFromLocalStorage("onAddress") + "&absent=" + getFromLocalStorage("absent")+ "&free=" + getFromLocalStorage("free") + "&accessToken=" + getFromLocalStorage("accessToken"),
                     type: "POST",
                     dataType: "json",
                     contentType: "application/json",
@@ -86,6 +119,8 @@ var pullRequests = (function (){
                         localStorage.setItem("accessToken", status.accessToken);
                         if (status.status == "OK") {
                             setInformation();
+                            saveInLocalStorage("absent", "false");
+                            saveInLocalStorage("free", "false");
                             if(status.request != undefined){
                                 saveInLocalStorage("currentRequestStartAddress", status.request.startAddress);
                                 saveInLocalStorage("currentRequestFinishAddress", status.request.finishAddress);
@@ -117,11 +152,6 @@ var pullRequests = (function (){
                         
                     }
                 });
-            }
-            function geoError() {
-                alertStatus("Търсене на GPS сигнал ...", "#cccccc");
-                 localStorage.setItem("ActiveRequest", "false");
-            }
         }
     }
 
@@ -130,6 +160,7 @@ var pullRequests = (function (){
 
     localStorage.setItem("PullStarted", "false");
         clearInterval(timer);
+        stopTracking();
     }
 
     return{
@@ -139,6 +170,20 @@ var pullRequests = (function (){
 }());
 
 
+        function absentFree(){
+        if(localStorage.getItem("status") == "free"){
+        localStorage.setItem("absent", "true");
+        localStorage.setItem("free", "false");
+        localStorage.setItem("status", "absent");
+        document.getElementById("absentFreeBtn").innerHTML = "ВЪРНАХ СЕ";
+
+        }else if(localStorage.getItem("status") == "absent"){ 
+        localStorage.setItem("absent", "false");
+        localStorage.setItem("free", "true");
+        localStorage.setItem("status", "free");
+        document.getElementById("absentFreeBtn").innerHTML = "ОТСЪСТВАМ";
+        }
+    }
 function alertStatus(message, color , textColor = "#ffffff") {
     var text = document.getElementsByClassName("header-status-text")[0];
     text.innerHTML = message;

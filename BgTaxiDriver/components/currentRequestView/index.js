@@ -3,7 +3,8 @@
 app.currentRequestView = kendo.observable({
     onShow: function() {
 
-        console.log("Current requestsView shown");
+        document.getElementById("start-address-text").innerHTML = getFromLocalStorage("currentRequestStartAddress");
+        document.getElementById("finish-address-text").innerHTML = getFromLocalStorage("currentRequestFinishAddress");
         document.getElementById("CurrentRequestViewScreen").style.height = (document.body.offsetHeight -58) + "px";
         if(localStorage.getItem("IsOnAddress")== "true"){
              document.getElementById("onAddressBtn").innerHTML = "ВРЪЗКА С КЛИЕНТ";
